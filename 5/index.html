@@ -1,0 +1,89 @@
+<!-- 
+5. A Website provides for buying sports goods.
+ The user can buy watches - Rado and Rolex or racquettes - Yonex or Wilson.
+ The products are limited edition and hence there is a <div>
+ at the top of the page which displays the total number of items available for each product.
+ Since multiple users can access the website and buy products, this information must be frequently refreshed.
+ Demonstrate the functionality by employing the periodic refresh pattern.
+ Also implement and demonstrate the exponential back-off pattern for failure.
+ -->
+ 
+ <html>
+	<head>
+		<style>
+			.item{
+				padding : 10px;
+				border : dashed 1px orange;
+				float : left;
+				margin : 10px;
+				text-align : center;
+			}
+			
+			.item:hover
+			{
+				border : solid 1px orange;
+			}
+		</style>
+		
+		<script>
+			
+			function init()
+			{
+				xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = update;
+				xhr.timeout = 1000;
+				xhr.ontimeout = timezone;
+				
+				xhrBuy = new XMLHttpRequest();
+				
+				check();
+			}
+			
+			function update(){
+				if(xhr.status != 200 || xhr.readyState!=4) return;
+				var data = JSON.parse(xhr.responseText);
+				for(var i in data)
+				{
+					document.getElementById("Q"+i).innerHTML = data[i];
+				}
+				
+				timezone.backTime = 200;
+				setTimeout(check,1000);
+				
+			}
+			
+			function timezone()
+			{
+				this.backTime*=2;
+				setTimeout(check,this.backTime);
+			}
+			
+			function buy(id)
+			{
+				xhrBuy.open("GET","server.php?id="+id,true);
+				xhrBuy.send();
+			}
+			
+			function check()
+			{
+				xhr.open("GET","db.json",true);
+				xhr.send();
+				console.log("sent");
+			}
+		</script>
+	</head>
+	<body style="text-align : center;" onload = "init();">
+		<div id="Board">
+			<div class="item" id="rado" onclick="buy(this.id)"> Rado <br/><span id="Qrado">100</span> 
+			</div>
+			<div class="item" id="rolex" onclick="buy(this.id)"> Rolex <br/><span id="Qrolex">100</span> 
+			</div>
+			<div class="item" id="yonex" onclick="buy(this.id)"> Yonex <br/><span id="Qyonex">100</span> 
+			</div>
+			<div class="item" id="wilson" onclick="buy(this.id)"> Wilson <br/><span id="Qwilson">100</span> 
+			</div>
+		</div>
+		
+		
+	</body>
+ </html>
