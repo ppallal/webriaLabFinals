@@ -1,0 +1,49 @@
+<!-- 14. Implement a simple Mashup using Google Map APIs and AJAX techniques.
+  Show a map of Bangalore, centred on PESIT. Add markers at PESIT, PESSE, RVCE and BMSCE with appropriate titles for each college.
+  The latitude and longitude of each of these colleges is stored in a file and should be read using AJAX techniques (for adding the markers).
+  
+The values are: 	
+PESIT: 12.9342678, 77.53432629999998, 
+PESSE: 12.8614515, 77.66470809999998, 
+RVCE: 12.9247501, 77.49875709999992, 
+BMSCE: 12.9404973, 77.56568749999997
+ -->
+ 
+ <html >
+	<head >
+		<script type="text/javascript" src = "https://maps.googleapis.com/maps/api/js">
+		</script>
+		
+		<script>
+			function init()
+			{
+				var pesit = new google.maps.LatLng(12.9342678, 77.53432629999998);
+				
+				var options = {
+					center : pesit,
+					mapTypeId : google.maps.MapTypeId.ROADMAP,
+					zoom : 12
+				}
+				
+				mainMap = new google.maps.Map(document.getElementById("main"),options);
+				
+				var pesitMarker = new google.maps.Marker({ position : pesit, title : "PESIT",map : mainMap});
+				
+				var RVLoc = new google.maps.LatLng(12.9247501, 77.49875709999992);
+				var RVMarker = new google.maps.Marker({title :"RVCE" , position : RVLoc, map : mainMap});
+				
+				var PESSELoc = new google.maps.LatLng(12.8614515, 77.66470809999998);
+				var PESSEMarker = new google.maps.Marker({position : PESSELoc, title : "PESSE", map : mainMap});
+				
+				var BMSLoc = new google.maps.LatLng(12.9404973, 77.56568749999997);
+				var BMSMarker = new google.maps.Marker({title : "BMS", position : BMSLoc, map : mainMap });
+			}
+		</script>
+	</head>
+	
+	<body onload="init()">
+		<div id="main" style="width : 100%; height : 100%;">
+		
+		</div>
+	</body>
+ </html>
