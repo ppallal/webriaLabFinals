@@ -1,0 +1,71 @@
+<!-- 2. An HTML5 page has an animation running.
+ The animation works as follows.
+ A miniature red-coloured square starts at the center of a canvas element and expands (retaining its center coordinates).
+ When it touches the outer walls of the canvas, it disappears and a miniature circle now starts at the center of the canvas.
+ This circle starts expanding (while retaining its center coordinates) until it touches the canvas walls, 
+ whereupon the square takes over again. There is also a button which performs an involved calculation.
+ Demonstrate the side effects of the calculation on the animation. 
+Hence solve the problem using Web Workers. -->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+			function init()
+			{
+				canvas = document.getElementById("mycanvas");
+				h = canvas.height;
+				w = canvas.width;
+				ctx = canvas.getContext("2d");
+				c = w/2;
+				halfside = 20
+				ctx.strokeRect(c-halfside,c-halfside,2*halfside,2*halfside);
+				animate();
+			}
+			
+			function animate()
+			{
+				if(halfside == c) {
+					halfside = 20;
+					cAnimate();
+					return;
+				}
+				canvas.width = w;
+				halfside = halfside + 5;
+				ctx.strokeRect(c-halfside,c-halfside,2*halfside,2*halfside);
+				setTimeout(animate,25);
+			}
+			function cAnimate()
+			{
+				//alert("called");
+				if(halfside == c) {
+					halfside = 20;
+					animate();
+					return;
+				}
+				canvas.width = w;
+				ctx.beginPath();
+				ctx.arc(c,c,halfside,0,2*Math.PI);
+				ctx.stroke();
+				halfside+=5;
+				setTimeout(cAnimate,25);
+			}
+			/*----------------------------*/
+			function addNEcho()
+			{
+				var input = document.getElementById("num").value;
+				work = new Worker("worker.js");
+				work.postMessage(input);
+				work.onmessage = function(ev){document.getElementById("res").innerHTML = ev.data;};
+			}
+		</script>
+	</head>
+	<body style="text-align:center;" onload="init()">
+		<canvas id="mycanvas" width="500px" style="border: dashed 1px black" height="500px"></canvas>
+		<br/>
+		<input type="number" id="num"></input>
+		<button onclick = "addNEcho()">AddEcho </button>
+		<br/>
+		<span id="res"></span>
+	</body>
+</html>

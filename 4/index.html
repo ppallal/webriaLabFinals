@@ -1,0 +1,48 @@
+<!-- 4. Create an HTML page that has a form with 4 text fields.
+ The fields are USN, NAME, DEPT and GPA. Only the "USN" field is editable.
+ The "NAME", "DEPT" and "GPA" fields are NOT editable. They are READ-ONLY.
+ The student can enter a valid USN in the USN field.
+ As soon as the student exits the "USN" field, an AJAX call is made to a server script.
+ The server returns the NAME, DEPT and GPA values corresponding to the USN entered.
+ If the USN entered is invalid, the server returns "INVALID USN".
+ This string is then appended (next to the USN field) on the screen.
+ If proper values are returned for NAME, DEPT and GPA, the values are populated into the respective text fields.
+ (Remember these are read-only and hence only the server can populate these using Javascript.
+ The server side script can be trivial and return hard-coded values).   
+Implement the functionality using hidden iframes. Demonstrate the unique advantage of this technique. -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+			function init()
+			{
+				ifr = document.getElementById("ifr");
+				nam = document.getElementById("nam");
+				dept = document.getElementById("dept");
+				gpa = document.getElementById("gpa");
+				usn = document.getElementById("USN");
+				//ifr.onload = resHandler;
+			}
+			
+			function send()
+			{
+				ifr.src = "server.php?handler=resHandler&usn=" + usn.value;
+				
+			}
+			function resHandler(data)
+			{
+				nam.value = data.name;
+				dept.value = data.dept;
+				gpa.value = data.gpa;
+			}
+		</script>
+	</head>
+	<body style="text-align : center" onload="init()">
+		<input type="text" id="USN" onblur="send()" placeholder="USN"/>
+		<input type="text" id="nam" placeholder="Name" readonly/>
+		<input type="text" id="dept" placeholder="Department" readonly/>
+		<input type="text" id="gpa" placeholder="GPA" readonly/>
+		
+		<iframe id="ifr" style="display : none;"></iframe>
+	</body>
+</html>

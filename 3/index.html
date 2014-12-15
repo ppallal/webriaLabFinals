@@ -1,0 +1,106 @@
+<!-- 3. An HTML5 page has an animation running.
+ The animation works as follows.
+ There are two balls within the boundaries of a canvas element.
+ The balls are coloured red and blue. The balls bounce off the walls of the canvas and also off each other.
+ This animation is perpetual (never ending). There is also a button which performs an involved calculation.
+ Demonstrate the side effects of the calculation on the animation. 
+Hence solve the problem using Web Workers. -->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+			function init()
+			{
+				canvas = document.getElementById("mycanvas");
+				ctx = canvas.getContext("2d");
+				w = canvas.width;
+				h = canvas.height;
+				balls = [];
+				
+				blue = new Ball("blue",50,h/2,h/2,1);
+				blue.setSpeed(5,3);
+				red = new Ball("red",30,100,100,0);
+				red.setSpeed(10,-1);
+				red.animate();
+				blue.animate();
+				ballCollide();
+				console.log(blue);
+				
+			}
+
+			function ballCollide()
+			{
+				
+				var md = (balls[0].radius + balls[1].radius)*(balls[0].radius + balls[1].radius);
+				var d = (balls[0].xpos - balls[1].xpos)*(balls[0].xpos - balls[1].xpos) + (balls[0].ypos - balls[1].ypos) * (balls[0].ypos - balls[1].ypos);
+				if(d<md && !flag) {
+					flag = true;
+					//var sin = 1.0 * balls[0].ypos - balls[1].ypos/(balls[0].radius + balls[1].radius);
+					var temp = balls[0].xspeed;
+					//balls[0].xspeed = balls[1].xspeed * balls[1].radius/balls[0].radius;
+					//balls[1].xspeed = temp * balls[1].radius/balls[1].radius;
+					balls[0].xspeed = balls[1].xspeed;
+					balls[1].xspeed = temp;
+					
+					var temp = balls[0].yspeed;
+					//balls[0].yspeed = balls[1].yspeed * balls[1].radius/balls[0].radius;
+					//balls[1].yspeed = temp * balls[0].radius/balls[1].radius;
+					//canvas.width = w;
+					balls[0].yspeed = balls[1].yspeed;
+					balls[1].yspeed = temp;
+				}
+				else flag = false;
+				setTimeout(ballCollide,33);
+			}
+			
+			function Ball(colour,radius,x,y,id)
+			{
+				this. colour = colour;
+				this.id = id;
+				this.xspeed = null;
+				this.yspeed = null;
+				this.radius = radius;	
+				this.xpos = x;
+				this.ypos = y;
+				this.setSpeed = function(x,y)
+				{
+					this.xspeed = x;
+					this.yspeed = y;
+				}
+			}
+			Ball.prototype = {
+				animate : function(){
+					//alert("hi");
+					//canvas.width = w;
+					this.xpos += this.xspeed;
+					this.ypos += this.yspeed;
+					this.boundBounce();
+					
+					ctx.clearRect(this.xpos-this.radius-this.xspeed-1,this.ypos-this.radius-this.yspeed-1,this.radius*2+2,this.radius*2+2);
+					ctx.strokeStyle = this.colour;
+					ctx.beginPath();
+					ctx.arc(this.xpos,this.ypos,this.radius,0,Math.PI*2);
+					ctx.closePath();
+					ctx.stroke();
+					balls[this.id] = this;
+					var k = this.id;
+					console.log(this);
+					setTimeout(function(){Ball.prototype.animate.call(balls[k])},33);
+				},
+				boundBounce : function ()
+				{
+					if(this.radius + this.xpos >= w) {this.xspeed *= -1;canvas.width = w;} 
+					if(this.radius + this.ypos >= w) this.yspeed *= -1; 
+					if( -this.radius + this.xpos <= 0) {this.xspeed *= -1;canvas.width = w;} 
+					if( -this.radius + this.ypos <= 0) this.yspeed *= -1; 
+				},
+
+			}
+			
+		</script>
+	</head>
+	<body onload = "init()" style="text-align:center">
+		<canvas id="mycanvas" width="500px" height ="500px" style="border: dashed 1px black;">
+	</body>
+</html>

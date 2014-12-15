@@ -1,0 +1,59 @@
+<!-- 1. Write an HTML5 page that displays your resume.
+   The page should contain links, tables, buttons, etc. 
+   Use CSS3 to spice up the page. The page should have colour variations, gradients,
+   animated background-color  variations, shadows, curved edges and speech bubbles.  Also it has animated bloating of fonts for hyperlinks.
+   (That is, on mouseover the fontsize increases gradually to a new value. On mouseout, it gradually returns to its previous size). -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
+		<script>
+			function add()
+			{
+				var data = prompt("Chat");
+				document.getElementById("main").innerHTML+='<div class="speechBox">\
+																<span>'+data+'</span>\
+															</div>\
+															<div class="speechStick">\
+															</div>';
+			}
+		</script>
+	</head>
+	<body>
+		<div id="main">
+			<button >About</button>
+			<button>Education</button>
+			<button onclick="add()">Add Chat</button>
+			<!-- <div > -->
+			
+			<br/>
+			<br/>
+			<a href="#AP">Skip to the awesome part</a>
+			
+			<div>
+				<p>
+					I am Prafulla Pallal,I am the most awesome 
+					person to have ever lived on earth
+					my competitors could be Einstien and newton.
+					I am so awesome at every thing i do 
+					as a proof to rashmi Raghunandan 
+					i Would 
+				</p>
+			</div>
+			
+			<div class="speechBox">
+				<span>Server says Hi Vistor :P</span>
+			</div>
+			<div class="speechStick">
+			</div>
+			
+			<div class="speechBox">
+				<span>Pallal Says Hi :P</span>
+			</div>
+			<div class="speechStick">
+			</div>
+			
+		</div>
+		<div id="AP" name="AP"></div>
+	</body>
+</html>
