@@ -7,13 +7,45 @@ It has multiple images to display, a search form for the front-end user to  sear
  
  <html>
 	<head>
+		<script type="text/javascript" src = "jquery.min.js">
+		</script>
+		<script>
+			function load()
+			{
+				order = ["search","text","images","links"];
+				index = 0;
+				next();
+			}
+			
+			function next()
+			{
+				$("#"+order[index]).load("server.php?req="+order[index],next);
+				index++;
+			}
+		</script>
 		
+		
+		<style>
+			div{
+				margin : 100px;
+			}
+			.thumbnail
+			{
+				border-radius : 100%;
+				width : 150px;
+				height : 150px;
+			}
+		</style>
 	</head>
-	<body style="text-align : center;">
+	<body style="text-align : center;" onload="load();">
 		
-		<div id="search"></div>
-		<div id="images"></div>
-		<div id="links"></div>
-		<div id="text"></div>
+	<!-- 	<div id="search" onload="next()"></div>
+		<div id="images" onload="next()"></div>
+		<div id="links" onload="next()"></div>
+		<div id="text" onload="next()"></div>	
+	 -->	<div id="search" ></div>
+		<div id="images" ></div>
+		<div id="links" ></div>
+		<div id="text" ></div>
 	</body>
  </html>
